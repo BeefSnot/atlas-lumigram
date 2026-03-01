@@ -1,78 +1,90 @@
-import { Image, StyleSheet, Platform } from "react-native";
+import { FlashList } from '@shopify/flash-list';
+import { useState } from 'react';
+import { Alert, Image, StyleSheet, Text, View } from 'react-native';
+import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import { homeFeed } from '@/placeholder';
 
 export default function HomeScreen() {
+  const renderItem = ({ item }: { item: (typeof homeFeed)[number] }) => {
+    return <FeedItem item={item} />;
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
-        />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: "cmd + d",
-              android: "cmd + m",
-              web: "F12",
-            })}
-          </ThemedText>{" "}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this
-          starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{" "}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>{" "}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
-          directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <GestureHandlerRootView style={styles.container}>
+      <FlashList
+        data={homeFeed}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        contentContainerStyle={styles.listContent}
+      />
+    </GestureHandlerRootView>
+  );
+}
+
+function FeedItem({ item }: { item: (typeof homeFeed)[number] }) {
+  const [showCaption, setShowCaption] = useState(false);
+
+  const longPressGesture = Gesture.LongPress()
+    .runOnJS(true)
+    .onStart(() => {
+      setShowCaption((previousValue) => !previousValue);
+    });
+
+  const doubleTapGesture = Gesture.Tap()
+    .numberOfTaps(2)
+    .runOnJS(true)
+    .onStart(() => {
+      Alert.alert('Favorite', 'Double tap recognized.');
+    });
+
+  const composedGesture = Gesture.Exclusive(doubleTapGesture, longPressGesture);
+
+  return (
+    <View style={styles.card}>
+      <View style={styles.header}>
+        <Text style={styles.username}>{item.createdBy}</Text>
+      </View>
+      <GestureDetector gesture={composedGesture}>
+        <Image source={{ uri: item.image }} style={styles.image} resizeMode="cover" />
+      </GestureDetector>
+      {showCaption && (
+        <View style={styles.captionContainer}>
+          <Text style={styles.captionText}>Placeholder caption text</Text>
+        </View>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  listContent: {
+    paddingVertical: 10,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
+  card: {
+    marginBottom: 20,
+  },
+  header: {
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+  },
+  username: {
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  image: {
+    width: '100%',
+    height: 400,
+  },
+  captionContainer: {
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  },
+  captionText: {
+    fontSize: 16,
   },
 });
