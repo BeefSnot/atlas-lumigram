@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 
+import { LumigramTheme } from '../../constants/LumigramTheme';
 import { profileFeed } from '@/placeholder';
 
 export default function ProfileScreen() {
@@ -60,31 +61,35 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: LumigramTheme.colors.background,
   },
   profileHeader: {
     alignItems: 'center',
-    paddingTop: 16,
-    paddingBottom: 14,
+    paddingTop: 20,
+    paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: LumigramTheme.colors.border,
+    backgroundColor: LumigramTheme.colors.surface,
   },
   avatar: {
-    width: 88,
-    height: 88,
-    borderRadius: 44,
+    width: 96,
+    height: 96,
+    borderRadius: 48,
     marginBottom: 8,
+    borderWidth: 2,
+    borderColor: LumigramTheme.colors.border,
   },
   username: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '700',
+    color: LumigramTheme.colors.textPrimary,
   },
   gridContent: {
-    padding: 2,
+    padding: 4,
   },
   gridRow: {
     justifyContent: 'space-between',
-    marginBottom: 2,
+    marginBottom: 4,
   },
   gridImage: {
     width: '33%',

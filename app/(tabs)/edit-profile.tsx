@@ -11,6 +11,8 @@ import {
   View,
 } from 'react-native';
 
+import { LumigramTheme } from '../../constants/LumigramTheme';
+
 export default function EditProfileScreen() {
   const params = useLocalSearchParams<{ username?: string | string[]; avatar?: string | string[] }>();
 
@@ -81,38 +83,41 @@ export default function EditProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: LumigramTheme.colors.background,
     alignItems: 'center',
-    padding: 20,
-    paddingTop: 40,
+    padding: LumigramTheme.spacing.screen,
+    paddingTop: 36,
   },
   avatar: {
     width: 120,
     height: 120,
     borderRadius: 60,
     marginBottom: 20,
+    borderWidth: 2,
+    borderColor: LumigramTheme.colors.border,
   },
   input: {
     width: '100%',
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
+    borderColor: LumigramTheme.colors.border,
+    borderRadius: LumigramTheme.radius.md,
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 16,
+    color: LumigramTheme.colors.textPrimary,
     marginBottom: 16,
-    backgroundColor: '#fafafa',
+    backgroundColor: LumigramTheme.colors.surface,
   },
   saveButton: {
     width: '100%',
     height: 50,
-    borderRadius: 10,
-    backgroundColor: '#0a7ea4',
+    borderRadius: LumigramTheme.radius.md,
+    backgroundColor: LumigramTheme.colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
   },
   saveButtonText: {
-    color: '#fff',
+    color: LumigramTheme.colors.accentText,
     fontWeight: '700',
     fontSize: 16,
   },

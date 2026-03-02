@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Alert, Image, StyleSheet, Text, View } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { LumigramTheme } from '../../constants/LumigramTheme';
 import { homeFeed } from '@/placeholder';
 
 export default function HomeScreen() {
@@ -60,31 +61,39 @@ function FeedItem({ item }: { item: (typeof homeFeed)[number] }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: LumigramTheme.colors.background,
   },
   listContent: {
-    paddingVertical: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
   },
   card: {
-    marginBottom: 20,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: LumigramTheme.colors.border,
+    borderRadius: LumigramTheme.radius.lg,
+    overflow: 'hidden',
+    backgroundColor: LumigramTheme.colors.surface,
   },
   header: {
-    paddingHorizontal: 15,
-    paddingVertical: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
   },
   username: {
     fontWeight: '700',
     fontSize: 16,
+    color: LumigramTheme.colors.textPrimary,
   },
   image: {
     width: '100%',
-    height: 400,
+    height: 360,
   },
   captionContainer: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 14,
     paddingVertical: 10,
   },
   captionText: {
-    fontSize: 16,
+    fontSize: 15,
+    color: LumigramTheme.colors.textSecondary,
   },
 });

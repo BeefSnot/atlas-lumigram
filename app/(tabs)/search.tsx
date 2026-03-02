@@ -1,5 +1,6 @@
 import { Image, StyleSheet, Text, View, FlatList } from 'react-native';
 
+import { LumigramTheme } from '../../constants/LumigramTheme';
 import { userSearch } from '@/placeholder';
 
 export default function SearchScreen() {
@@ -27,17 +28,21 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: LumigramTheme.colors.background,
   },
   listContent: {
-    padding: 16,
+    padding: 12,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderRadius: LumigramTheme.radius.md,
+    borderColor: LumigramTheme.colors.border,
+    backgroundColor: LumigramTheme.colors.surface,
+    marginBottom: 10,
   },
   avatar: {
     width: 48,
@@ -48,5 +53,6 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 16,
     fontWeight: '600',
+    color: LumigramTheme.colors.textPrimary,
   },
 });

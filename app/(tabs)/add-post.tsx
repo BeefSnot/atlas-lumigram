@@ -10,6 +10,8 @@ import {
   View,
 } from 'react-native';
 
+import { LumigramTheme } from '../../constants/LumigramTheme';
+
 export default function AddPostScreen() {
   const [selectedImageUri, setSelectedImageUri] = useState<string | null>(null);
   const [caption, setCaption] = useState('');
@@ -81,29 +83,30 @@ export default function AddPostScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
+    padding: LumigramTheme.spacing.screen,
+    backgroundColor: LumigramTheme.colors.background,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '700',
-    marginBottom: 16,
+    color: LumigramTheme.colors.textPrimary,
+    marginBottom: 14,
   },
   imagePickerContainer: {
     width: '100%',
     aspectRatio: 1,
-    borderRadius: 10,
+    borderRadius: LumigramTheme.radius.lg,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: LumigramTheme.colors.border,
     borderStyle: 'dashed',
-    backgroundColor: '#f7f7f7',
+    backgroundColor: LumigramTheme.colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
     marginBottom: 16,
   },
   imagePickerText: {
-    color: '#666',
+    color: LumigramTheme.colors.textSecondary,
     fontSize: 16,
   },
   imagePreview: {
@@ -112,28 +115,25 @@ const styles = StyleSheet.create({
   },
   captionInput: {
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
+    borderColor: LumigramTheme.colors.border,
+    borderRadius: LumigramTheme.radius.md,
     padding: 14,
     minHeight: 100,
     fontSize: 16,
-    backgroundColor: '#fafafa',
+    color: LumigramTheme.colors.textPrimary,
+    backgroundColor: LumigramTheme.colors.surface,
     marginBottom: 16,
   },
   postButton: {
-    backgroundColor: '#0a7ea4',
-    borderRadius: 10,
+    backgroundColor: LumigramTheme.colors.accent,
+    borderRadius: LumigramTheme.radius.md,
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
   },
   postButtonText: {
-    color: '#fff',
+    color: LumigramTheme.colors.accentText,
     fontSize: 16,
     fontWeight: '700',
-  },
-  subtitle: {
-    fontSize: 14,
-    color: '#555',
   },
 });
