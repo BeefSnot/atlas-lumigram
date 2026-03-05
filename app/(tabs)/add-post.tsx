@@ -154,6 +154,7 @@ export default function AddPostScreen() {
         caption: caption.trim(),
         createdAt: serverTimestamp(),
         createdByUserId: user.uid,
+        createdByDisplayName: user.displayName ?? user.email ?? user.uid,
       });
 
       Alert.alert('Post added', 'Your post has been uploaded successfully.');
