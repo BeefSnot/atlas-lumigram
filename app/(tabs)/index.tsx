@@ -1,13 +1,13 @@
+import { StyleSheet, Image, View, Text, Alert } from 'react-native';
+import { GestureHandlerRootView, GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { FlashList } from '@shopify/flash-list';
+import { runOnJS } from 'react-native-reanimated';
 import { useState } from 'react';
-import { Alert, Image, StyleSheet, Text, View } from 'react-native';
-import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { LumigramTheme } from '../../constants/LumigramTheme';
 import { homeFeed } from '@/placeholder';
 
 export default function HomeScreen() {
-  const renderItem = ({ item }: { item: (typeof homeFeed)[number] }) => {
+  const renderItem = ({ item }: { item: typeof homeFeed[0] }) => {
     return <FeedItem item={item} />;
   };
 
@@ -15,43 +15,54 @@ export default function HomeScreen() {
     <GestureHandlerRootView style={styles.container}>
       <FlashList
         data={homeFeed}
-        keyExtractor={(item) => item.id}
         renderItem={renderItem}
-        contentContainerStyle={styles.listContent}
+        estimatedItemSize={400}
+        contentContainerStyle={styles.listContainer}
       />
     </GestureHandlerRootView>
   );
 }
 
-function FeedItem({ item }: { item: (typeof homeFeed)[number] }) {
+function FeedItem({ item }: { item: typeof homeFeed[0] }) {
   const [showCaption, setShowCaption] = useState(false);
 
+  const toggleCaption = () => {
+  };
+
+  const showFavoriteAlert = () => {
+    Alert.alert('Favorite', 'Double tap recognized.');
+  };
+
   const longPressGesture = Gesture.LongPress()
-    .runOnJS(true)
     .onStart(() => {
-      setShowCaption((previousValue) => !previousValue);
+      runOnJS(toggleCaption)();
     });
 
   const doubleTapGesture = Gesture.Tap()
     .numberOfTaps(2)
-    .runOnJS(true)
     .onStart(() => {
-      Alert.alert('Favorite', 'Double tap recognized.');
+      runOnJS(showFavoriteAlert)();
     });
 
   const composedGesture = Gesture.Exclusive(doubleTapGesture, longPressGesture);
 
   return (
-    <View style={styles.card}>
+    <View style={styles.itemContainer}>
       <View style={styles.header}>
-        <Text style={styles.username}>{item.createdBy}</Text>
+        <Text style={styles.headerText}>{item.createdBy}</Text>
       </View>
       <GestureDetector gesture={composedGesture}>
-        <Image source={{ uri: item.image }} style={styles.image} resizeMode="cover" />
+        <View>
+          <Image
+            source={{ uri: item.image }}
+            style={styles.image}
+            resizeMode="cover"
+          />
+        </View>
       </GestureDetector>
       {showCaption && (
         <View style={styles.captionContainer}>
-          <Text style={styles.captionText}>Placeholder caption text</Text>
+          <Text style={styles.captionText}>{item.caption}</Text>
         </View>
       )}
     </View>
@@ -59,41 +70,12 @@ function FeedItem({ item }: { item: (typeof homeFeed)[number] }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: LumigramTheme.colors.background,
-  },
-  listContent: {
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-  },
-  card: {
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: LumigramTheme.colors.border,
-    borderRadius: LumigramTheme.radius.lg,
-    overflow: 'hidden',
-    backgroundColor: LumigramTheme.colors.surface,
-  },
-  header: {
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-  },
-  username: {
-    fontWeight: '700',
-    fontSize: 16,
-    color: LumigramTheme.colors.textPrimary,
-  },
-  image: {
-    width: '100%',
-    height: 360,
-  },
-  captionContainer: {
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-  },
-  captionText: {
-    fontSize: 15,
-    color: LumigramTheme.colors.textSecondary,
-  },
+  container: { flex: 1, backgroundColor: '#fff' },
+  listContainer: { paddingVertical: 10 },
+  itemContainer: { marginBottom: 20 },
+  header: { padding: 15, flexDirection: 'row', alignItems: 'center' },
+  headerText: { fontWeight: 'bold', fontSize: 16 },
+  image: { width: '100%', height: 400 },
+  captionContainer: { padding: 15 },
+  captionText: { fontSize: 16 }
 });

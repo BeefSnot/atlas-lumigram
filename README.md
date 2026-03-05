@@ -16,6 +16,24 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
     npx expo start
    ```
 
+## Firebase authentication setup
+
+1. Install dependencies (if not already installed):
+
+   ```bash
+   npm install
+   ```
+
+2. Create a `.env` file in the project root and copy values from `.env.example`.
+
+3. In Firebase Console, enable **Authentication → Sign-in method → Email/Password**.
+
+4. Restart Expo after changing env values:
+
+   ```bash
+   npx expo start -c
+   ```
+
 In the output, you'll find options to open the app in a
 
 - [development build](https://docs.expo.dev/develop/development-builds/introduction/)

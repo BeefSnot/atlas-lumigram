@@ -2,45 +2,59 @@ import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 
-import { LumigramTheme } from '../../constants/LumigramTheme';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function RegisterScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { registerWithEmail } = useAuth();
+
+  const handleRegister = async () => {
+    setErrorMessage(null);
+    setIsSubmitting(true);
+
+    try {
+      await registerWithEmail(email, password);
+      router.replace('/(tabs)');
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : 'Unable to register right now.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.title}>Create Account</Text>
-        <Text style={styles.subtitle}>Join Lumigram to start sharing photos</Text>
+      <Text style={styles.title}>Register for Lumigram</Text>
+      
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+      />
+      
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor={LumigramTheme.colors.textSecondary}
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor={LumigramTheme.colors.textSecondary}
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-
-        <TouchableOpacity style={styles.button} onPress={() => router.replace('/(tabs)')}>
-          <Text style={styles.buttonText}>Create Account</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => router.replace('/(auth)/login')}>
-          <Text style={styles.linkText}>Login to an existing account</Text>
-        </TouchableOpacity>
-      </View>
+      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+      
+      <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={isSubmitting}>
+        <Text style={styles.buttonText}>{isSubmitting ? 'Creating Account...' : 'Create Account'}</Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity onPress={() => router.back()}>
+        <Text style={styles.linkText}>Login to an existing account</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -49,58 +63,48 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: LumigramTheme.spacing.screen,
-    backgroundColor: LumigramTheme.colors.background,
-  },
-  card: {
-    borderWidth: 1,
-    borderColor: LumigramTheme.colors.border,
-    borderRadius: LumigramTheme.radius.lg,
-    padding: LumigramTheme.spacing.xl,
-    backgroundColor: LumigramTheme.colors.surface,
+    padding: 20,
+    backgroundColor: '#fff',
   },
   title: {
-    fontSize: 30,
-    fontWeight: '700',
-    color: LumigramTheme.colors.textPrimary,
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 40,
     textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 15,
-    color: LumigramTheme.colors.textSecondary,
-    textAlign: 'center',
-    marginTop: 6,
-    marginBottom: 22,
   },
   input: {
     height: 50,
     borderWidth: 1,
-    borderColor: LumigramTheme.colors.border,
-    borderRadius: LumigramTheme.radius.md,
+    borderColor: '#ddd',
+    borderRadius: 8,
     paddingHorizontal: 15,
-    marginBottom: 12,
+    marginBottom: 15,
     fontSize: 16,
-    color: LumigramTheme.colors.textPrimary,
-    backgroundColor: LumigramTheme.colors.background,
+    backgroundColor: '#fafafa',
+  },
+  errorText: {
+    color: '#dc2626',
+    marginBottom: 12,
+    textAlign: 'center',
+    fontSize: 14,
   },
   button: {
-    backgroundColor: LumigramTheme.colors.accent,
+    backgroundColor: '#0a7ea4',
     height: 50,
-    borderRadius: LumigramTheme.radius.md,
+    borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 8,
-    marginBottom: 14,
+    marginBottom: 15,
+    marginTop: 10,
   },
   buttonText: {
-    color: LumigramTheme.colors.accentText,
+    color: '#fff',
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: 'bold',
   },
   linkText: {
-    color: LumigramTheme.colors.accent,
+    color: '#0a7ea4',
     textAlign: 'center',
-    fontSize: 15,
-    fontWeight: '600',
-  },
+    fontSize: 16,
+  }
 });
